@@ -17,6 +17,7 @@ class BaseModel(models.Model):
         self.deleted_at = now
         self.save(update_fields=['deleted_at'])
 
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -84,7 +85,7 @@ class Size(models.Model):
         ('right', 'Right foot'),
     }
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    left_right = models.CharField(null=False, choices=Left_Right)
+    left_right = models.CharField(null=False, max_length=10, choices=Left_Right)
     length = models.FloatField(default=0.0)
     width = models.FloatField(default=0.0)
     height = models.FloatField(default=0.0)
@@ -106,17 +107,18 @@ class Shoe(models.Model):
 class Review(BaseModel):
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE)
     content = models.TextField()
-    star_rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)]) #별점은 (저장된 값/2)
+    star_rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])  # 별점은 (저장된 값/2)
 
 
 class Style(models.Model):
     style_name = models.CharField(max_length=30)
     description = models.TextField()
 
+
 class StyleMatch(models.Model):
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE)
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
-    image = models.TextField() #이미지 url 저장
+    image = models.TextField()  # 이미지 url 저장
 
 
 class UserStyle(models.Model):
