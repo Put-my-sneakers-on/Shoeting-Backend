@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.timezone import now
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # Create your models here.
@@ -76,9 +77,49 @@ class User(AbstractBaseUser, BaseModel):
     def __str__(self):
         return self.nickname
 
-# class Size(models.Model)
-# class UserStyle(models.Model)
-# class Shoe(models.Model)
-# class Review(models.Model)
-# class Style(models.Model)
-# class StyleMatch(models.Model)
+
+class Size(models.Model):
+    Left_Right = {
+        ('left', 'Left foot'),
+        ('right', 'Right foot'),
+    }
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    left_right = models.CharField(null=False, choices=Left_Right)
+    length = models.FloatField(default=0.0)
+    width = models.FloatField(default=0.0)
+    height = models.FloatField(default=0.0)
+
+
+class Brand(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+
+
+class Shoe(models.Model):
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    serial_number = models.CharField(max_length=50)
+    price = models.IntegerField()
+    # 크롤링한 정보 데베에 저장해야 할지 말아야 할지 찾아보기
+
+
+class Review(BaseModel):
+    shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE)
+    content = models.TextField()
+    star_rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)]) #별점은 (저장된 값/2)
+
+
+class Style(models.Model):
+    style_name = models.CharField(max_length=30)
+    description = models.TextField()
+
+class StyleMatch(models.Model):
+    shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE)
+    style = models.ForeignKey(Style, on_delete=models.CASCADE)
+    image = models.TextField() #이미지 url 저장
+
+
+class UserStyle(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    style = models.ForeignKey(Style, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
