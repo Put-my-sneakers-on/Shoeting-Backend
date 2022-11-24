@@ -5,19 +5,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # Create your models here.
-class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
-
-    class Meta:
-        abstract = True
-
-    def delete(self, using=None, keep_parents=False):
-        self.deleted_at = now
-        self.save(update_fields=['deleted_at'])
-
-
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -49,7 +36,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, BaseModel):
+class User(AbstractBaseUser):
     user_id = models.CharField(max_length=20, primary_key=True)
     nickname = models.CharField(max_length=20)
     email = models.EmailField(max_length=255, unique=True)
@@ -57,8 +44,13 @@ class User(AbstractBaseUser, BaseModel):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.fullname
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, default=None)
+
+    def delete(self, using=None, keep_parents=False):
+        self.deleted_at = now
+        self.save(update_fields=['deleted_at'])
 
     def has_perm(self, perm, obj=None):
         return True
@@ -81,8 +73,8 @@ class User(AbstractBaseUser, BaseModel):
 
 class Size(models.Model):
     Left_Right = {
-        ('left', 'Left foot'),
-        ('right', 'Right foot'),
+        ('left', '왼발'),
+        ('right', '오른발'),
     }
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     left_right = models.CharField(null=False, max_length=10, choices=Left_Right)
@@ -104,21 +96,34 @@ class Shoe(models.Model):
     # 크롤링한 정보 데베에 저장해야 할지 말아야 할지 찾아보기
 
 
-class Review(BaseModel):
+class Review(models.Model):
+    Length_Recommendation = {
+        ('long', '길어요'),
+        ('normal', '적당해요'),
+        ('short', '짧아요'),
+    }
+    Width_Recommendation = {
+        ('wide', '넓어요'),
+        ('normal', '적당해요'),
+        ('narrow', '좁아요'),
+    }
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE)
-    content = models.TextField()
-    star_rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])  # 별점은 (저장된 값/2)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    length = models.CharField(null=True, max_length=10, choices=Length_Recommendation)
+    width = models.CharField(null=True, max_length=10, choices=Width_Recommendation)
+    # content = models.TextField()
+    # star_rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])  # 별점은 (저장된 값/2)
 
 
 class Style(models.Model):
     style_name = models.CharField(max_length=30)
     description = models.TextField()
+    image = models.TextField()  # 이미지 url 저장
 
 
 class StyleMatch(models.Model):
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE)
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
-    image = models.TextField()  # 이미지 url 저장
 
 
 class UserStyle(models.Model):
