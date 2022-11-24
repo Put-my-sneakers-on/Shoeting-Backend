@@ -90,6 +90,7 @@ class Brand(models.Model):
 
 class Shoe(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    category = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
     serial_number = models.CharField(max_length=50)
     price = models.IntegerField()
@@ -118,15 +119,15 @@ class Review(models.Model):
 class Style(models.Model):
     style_name = models.CharField(max_length=30)
     description = models.TextField()
-    image = models.TextField()  # 이미지 url 저장
 
 
-class StyleMatch(models.Model):
-    shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE)
+class StyleImage(models.Model):
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
+    image = models.TextField()  # 이미지 url 저장
 
 
 class UserStyle(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
+    image = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
