@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.timezone import now
-from django.core.validators import MinValueValidator, MaxValueValidator
+#from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # Create your models here.
@@ -76,11 +76,10 @@ class Size(models.Model):
         ('left', '왼발'),
         ('right', '오른발'),
     }
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, primary_key=True)
     left_right = models.CharField(null=False, max_length=10, choices=Left_Right)
     length = models.FloatField(default=0.0)
     width = models.FloatField(default=0.0)
-    height = models.FloatField(default=0.0)
 
 
 class Brand(models.Model):
@@ -119,15 +118,21 @@ class Review(models.Model):
 class Style(models.Model):
     style_name = models.CharField(max_length=30)
     description = models.TextField()
+    characteristics = models.TextField()
 
 
 class StyleImage(models.Model):
-    style = models.ForeignKey(Style, on_delete=models.CASCADE)
+    style = models.ForeignKey(Style, on_delete=models.CASCADE, primary_key=True)
     image = models.TextField()  # 이미지 url 저장
+
+
+class StyleMatch(models.Model):
+    shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE)
+    style = models.ForeignKey(Style, on_delete=models.CASCADE)
 
 
 class UserStyle(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    style = models.ForeignKey(Style, on_delete=models.CASCADE)
+    style = models.CharField(max_length=50)  # 유사도 높은 style id 순서대로 저장(','로 구분하고 이용할 때 리스트로 파싱)
     image = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
