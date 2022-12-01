@@ -26,7 +26,7 @@ class UserStyle2Shoe(APIView):
             sim_total[shoe.id] = similarity_total
         # 3. 유사도 합 높은 순으로 정렬
         dict(sorted(sim_total.items(), key=lambda item: item[1]))
-        # 4. 리스트 리턴 - 유사도 합 높은 것부터 리턴 리스트에 저장
+        # 4. 리스트 리턴 - 유사도 합 높은 것부터 리턴 리스트에 저장 예정
         return_list = []
         return Response(return_list)
 
@@ -35,12 +35,12 @@ class UserStyle2Shoe(APIView):
 
 
 # (비교할 스타일, 유저 스타일) -> 유사도 계산
-# 코사인 유사도 - 다시 확인 필요
+# 코사인 유사도
 def cos_sim(a, b):
+    characteristics = (a, b)
     vectorizer = TfidfVectorizer()
-    tfidf_matrix_a = vectorizer.fit_transform(a)
-    tfidf_matrix_b = vectorizer.fit_transform(b)
-    cosine_sim = cosine_similarity(tfidf_matrix_a, tfidf_matrix_b)
+    tfidf_matrix = vectorizer.fit_transform(characteristics)
+    cosine_sim = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
     return cosine_sim
 
 
