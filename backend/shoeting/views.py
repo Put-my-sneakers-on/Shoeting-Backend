@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # AI 모델의 output 예시 (일단 string으로)
 userCharacteristics ="후드티, 청바지, 노랑, 파랑"
+
 class UserStyle2Shoe(APIView):
     def post(self, request):
         styles = Style.objects.all()
@@ -25,10 +27,14 @@ class UserStyle2Shoe(APIView):
                 similarity_total += similarity_list[i]
             sim_total[shoe.id] = similarity_total
         # 3. 유사도 합 높은 순으로 정렬
-        dict(sorted(sim_total.items(), key=lambda item: item[1]))
+        sorted_sim = sorted(sim_total.items(), key=lambda item: item[1])
         # 4. 리스트 리턴 - 유사도 합 높은 것부터 리턴 리스트에 저장 예정
         return_list = []
-        return Response(return_list)
+        for shoe_id in sorted_sim:
+            return_list.append(shoe_id)
+        from django.core.serializers import json
+        result = json.dumps({'data': return_list})
+        return HttpResponse(result, content_type ="application/json")
 
 
 

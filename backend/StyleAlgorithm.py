@@ -11,7 +11,7 @@ def cos_sim(a, b):
 
 
 style = "후드티, 티셔츠, 청바지, 면바지"
-user = "후드티, 청바지, 노랑, 파랑"
+user = "후드티, 청바지, 검정, 줄무늬"
 
 print("코사인 유사도: ", cos_sim(style, user))
 
