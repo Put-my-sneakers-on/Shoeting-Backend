@@ -133,6 +133,6 @@ class StyleMatch(models.Model):
 
 class UserStyle(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    style = models.CharField(max_length=50)  # 유사도 높은 style id 순서대로 저장(','로 구분하고 이용할 때 리스트로 파싱)
+    style = models.CharField(max_length=50)
     image = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
