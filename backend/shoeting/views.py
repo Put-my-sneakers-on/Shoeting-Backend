@@ -15,6 +15,7 @@ class UserStyle2Shoe(APIView):
     def post(self, request):
         styles = Style.objects.all()
         # 1. 각 스타일에 대해 코사인 유사도 계산
+        # Todo: 배열에 저장해둬야
         for style in styles:
             cos_sim(style.characteristics, userCharacteristics)
         # 2. 각 신발별로 유사도 합 구하기

@@ -66,5 +66,5 @@ def test_algorithm(user):
 
 # 실제로는 색상 정보 변환 함수를 구현해 추출된 색상에 대해 채도낮음, 밝음 등의 정보를 얻어 속성 텍스트에 추가해야 하지만
 # 테스트 단계에서는 편의상 바로 input 값에 넣도록 하겠다.
-# print(test_algorithm("이 안에 옷차림에 대한 정보를 넣어보세요 ex)니트, 청바지, 채도낮음, 패턴없음"))
+# print(test_algorithm("이 안에 옷차림에 대한 정보를 넣어보세요"))
 print(test_algorithm("니트, 청바지, 채도낮음, 패턴없음"))
