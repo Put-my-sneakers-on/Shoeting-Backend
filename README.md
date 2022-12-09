@@ -49,7 +49,7 @@ $ python manage.py createsuperuser
 위 명령어를 통해 관리자계정을 생성할 수 있다.  
 (명령어 시행 위치: Shoeting-backend/backend)
 
-runserver 명령어를 시행한 상태에서 http://127.0.0.1:8000/admin에 들어가면
+runserver 명령어를 시행한 상태에서 http://127.0.0.1:8000/admin 에 들어가면
 django가 제공하는 관리자페이지를 이용할 수 있다.  
 
 admin.py 파일(위치: Shoeting-backend/backend/shoeting/)에 모델들을 등록한 상태여서
@@ -69,5 +69,5 @@ test_algorithm 함수의 인자로 옷차림에 대한 정보를 보내면 여�
 자세한 내용은 해당 파일에 주석으로 설명하였다.  
 
 ## API: 추후 개발 예정
-runserver 후 http://127.0.0.1:8000/shoeting에 들어가도 연결된 api가 없는 것은 
+runserver 후 http://127.0.0.1:8000/shoeting 에 들어가도 연결된 api가 없는 것은 
 아직 개발된 api가 없기 때문이다.
