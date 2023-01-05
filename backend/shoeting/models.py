@@ -93,7 +93,6 @@ class Shoe(models.Model):
     name = models.CharField(max_length=50)
     serial_number = models.CharField(max_length=50)
     price = models.IntegerField()
-    # 크롤링한 정보 데베에 저장해야 할지 말아야 할지 찾아보기
 
 
 class Review(models.Model):
