@@ -18,7 +18,7 @@ class JoinView(APIView):
     def post(self, request):
         # 비밀번호 유효성 검사
         pw = request.data.get('password')
-        regex_pw = '^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}'
+        regex_pw = '[A-Za-z0-9!@##$%^&+=]{8,25}'
         if not re.match(regex_pw, pw):
             return Response({"8자 이상의 영문 대/소문자, 숫자, 특수문자 조합을 입력해주세요."}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 

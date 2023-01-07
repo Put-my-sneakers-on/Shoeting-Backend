@@ -7,12 +7,12 @@ class JoinSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        user_id = validated_data.get('user_id')
+        id = validated_data.get('id')
         nickname = validated_data.get('nickname')
         email = validated_data.get('email')
         password = validated_data.get('password')
         user = User(
-            user_id=user_id,
+            id=id,
             nickname=nickname,
             email=email,
             password=password

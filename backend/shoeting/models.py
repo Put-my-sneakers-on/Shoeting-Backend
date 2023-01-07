@@ -8,25 +8,25 @@ from django.utils.timezone import now
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, user_id, nickname, email, password, **extra_fields):
-        if not user_id:
+    def _create_user(self, id, nickname, email, password, **extra_fields):
+        if not id:
             raise ValueError('Users require an id field')
         if not nickname:
             raise ValueError('Users require a nickname field')
         if not email:
             raise ValueError('Users require an email field')
         email = self.normalize_email(email)
-        user = self.model(user_id=user_id, nickname=nickname, email=email, **extra_fields)
+        user = self.model(id=id, nickname=nickname, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, user_id, nickname, email, password=None, **extra_fields):
-        return self._create_user(user_id, nickname, email, password, **extra_fields)
+    def create_user(self, id, nickname, email, password=None, **extra_fields):
+        return self._create_user(id, nickname, email, password, **extra_fields)
 
-    def create_superuser(self, user_id, nickname, email, password, **extra_fields):
+    def create_superuser(self, id, nickname, email, password, **extra_fields):
         user = self.create_user(
-            user_id=user_id,
+            id=id,
             nickname=nickname,
             email=email,
             password=password,
@@ -37,7 +37,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    user_id = models.CharField(max_length=20, primary_key=True)
+    id = models.CharField(max_length=20, primary_key=True)
     nickname = models.CharField(max_length=20)
     email = models.EmailField(max_length=255, unique=True)
 
@@ -64,7 +64,7 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'user_id'
+    USERNAME_FIELD = 'id'
     REQUIRED_FIELDS = ['email', 'nickname', ]
 
     def __str__(self):
